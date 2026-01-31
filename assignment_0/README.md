@@ -20,7 +20,7 @@ ctest --test-dir build/assignment_0 -C Release --output-on-failure
 cmake -S assignment_0 -B build/assignment_0 -DCMAKE_BUILD_TYPE=Release -DA0_BUILD_OPTIONAL_09_11=ON
 cmake --build build/assignment_0 --config Release
 
-# CI（GitHub Actions）里也提供同等开关：手动运行工作流 `ci` 并设置输入 `a0_optional=true`
+# CI（GitHub Actions）里也提供同等开关：手动运行工作流 `ci` 并设置输入 `a0_build_test=true`；如需编译选做题再设置 `a0_optional=true`
 
 ```
 

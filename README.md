@@ -4,17 +4,23 @@
 ---
 ## 项目介绍
 本项目旨在通过一系列编程和机器人控制任务，评估和提升参与者的技术能力。考核内容涵盖基础编程、算法设计、机器人控制等多个方面，旨在为战队选拔出具备扎实技术基础和创新能力的成员。
+本次作业6选4，完成任意4个作业即可通过考核。
+
 ---
 ## 目录结构
 - `assignment_0/`：作业0（基础编程 + 工程化扩展题：gtest + CMake 可选参考实现）
 - `assignment_1/`：作业1（协议帧解析：C++工程化 + 单测 + 可选Python对照）
+
 ---
 
 ## CI 说明
 本仓库 CI 配置见 `.github/workflows/ci.yml`。
 
-- 默认（push / PR）：`assignment_0` **不编译**选做题 A0-09~11，且**不运行** `assignment_0` 测试（避免选做题/未完成实现导致不必要的 CI 失败）。
-- 如需检查选做题：在 GitHub Actions 中手动运行工作流 `ci`，并将输入 `a0_optional` 设为 `true`，CI 会为 `assignment_0` 打开 `A0_BUILD_OPTIONAL_09_11=ON` 且启用并运行测试。
+- push / PR：默认不执行 build&test。
+- GitHub Actions 手动运行工作流 `ci`（Run workflow）时，可选择是否对每个作业执行 build&test：
+  - `a1_build_test`：控制 `assignment_1` 是否 build&test
+  - `a0_build_test`：控制 `assignment_0` 是否 build&test（会打开 `BUILD_TESTING=ON` 并运行 `ctest`）
+  - `a0_optional`：控制是否编译 `assignment_0` 选做题 A0-09~11（打开 `A0_BUILD_OPTIONAL_09_11=ON`，需配合 `a0_build_test=true`）
 
 ## 作业0: 基础编程
 背景：考察基础编程能力，包含简单的数学计算、条件判断、字符串处理等。

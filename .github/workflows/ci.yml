@@ -5,10 +5,18 @@ on:
   # pull_request:
   workflow_dispatch:
     inputs:
-      a0_optional:
-        description: 'Build optional A0-09~11 and run assignment_0 tests'
+      a0_build_test:
+        description: 'Build & test assignment_0'
         type: boolean
         default: false
+      a0_optional:
+        description: 'Build optional A0-09~11 (requires a0_build_test=true)'
+        type: boolean
+        default: false
+      a1_build_test:
+        description: 'Build & test assignment_1'
+        type: boolean
+        default: true
 
 jobs:
   build-test:
@@ -20,25 +28,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Configure
+      - name: Configure (assignment_1)
+        if: ${{ (github.event_name != 'workflow_dispatch') || (github.event.inputs.a1_build_test == 'true') }}
         run: cmake -S assignment_1 -B build -DCMAKE_BUILD_TYPE=Release
 
-      - name: Build
+      - name: Build (assignment_1)
+        if: ${{ (github.event_name != 'workflow_dispatch') || (github.event.inputs.a1_build_test == 'true') }}
         run: cmake --build build --config Release
 
-      - name: Test
+      - name: Test (assignment_1)
+        if: ${{ (github.event_name != 'workflow_dispatch') || (github.event.inputs.a1_build_test == 'true') }}
         run: ctest --test-dir build -C Release --output-on-failure
 
       - name: Configure (assignment_0)
+        if: ${{ (github.event_name == 'workflow_dispatch') && (github.event.inputs.a0_build_test == 'true') }}
         run: >-
           cmake -S assignment_0 -B build/a0 -DCMAKE_BUILD_TYPE=Release
           -DA0_REFERENCE=OFF
           -DA0_BUILD_OPTIONAL_09_11=${{ (github.event.inputs.a0_optional == 'true') && 'ON' || 'OFF' }}
-          -DBUILD_TESTING=${{ (github.event.inputs.a0_optional == 'true') && 'ON' || 'OFF' }}
+          -DBUILD_TESTING=ON
 
       - name: Build (assignment_0)
+        if: ${{ (github.event_name == 'workflow_dispatch') && (github.event.inputs.a0_build_test == 'true') }}
         run: cmake --build build/a0 --config Release
 
       - name: Test (assignment_0)
-        if: ${{ github.event.inputs.a0_optional == 'true' }}
+        if: ${{ (github.event_name == 'workflow_dispatch') && (github.event.inputs.a0_build_test == 'true') }}
         run: ctest --test-dir build/a0 -C Release --output-on-failure
