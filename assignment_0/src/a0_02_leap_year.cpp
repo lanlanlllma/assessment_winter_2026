@@ -1,14 +1,11 @@
 #include <iostream>
 
-#include "rm_a0/a0_02_leap_year.hpp"
-
 int main() {
-  int year = 0;
-  if (!(std::cin >> year)) {
+    int year = 0;
+    std::cin >> year;
+
+    bool is_leap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    std::cout << (is_leap ? "YES" : "NO") << std::endl;
+
     return 0;
-  }
-
-  std::cout << rm_a0::FormatLeapYearAnswer(rm_a0::IsLeapYear(year));
-
-  return 0;
 }
